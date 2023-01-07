@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,14 +24,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 //                while(true);
                new MyAsyncTask().execute("Azka");
-               //for delay of 2ms
-                Handler handler=new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainActivity.this, "This is running in runnable", Toast.LENGTH_SHORT).show();
-                    }
-                },2000);
+
             }
         });
     }
@@ -39,6 +33,15 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             String asd=strings[0];
 //            Log.d("StringVal", asd);
+            //for delay of 2ms, run in main so displayed on UI
+            Handler handler=new Handler(Looper.getMainLooper());
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    handler.postDelayed(this,2000);
+                    Toast.makeText(MainActivity.this, "This is running in runnable", Toast.LENGTH_SHORT).show();
+                }
+            },2000);
             return asd;
         }
 
