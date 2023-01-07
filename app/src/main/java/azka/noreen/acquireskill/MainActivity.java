@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private class MyAsyncTask extends AsyncTask<String,Void,String> {
+    private class MyAsyncTask extends AsyncTask<String,Integer,String> {
         @Override
         protected String doInBackground(String... strings) {
             String asd=strings[0];
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     handler.postDelayed(this,2000);
+                    onProgressUpdate(12);
                     Toast.makeText(MainActivity.this, "This is running in runnable", Toast.LENGTH_SHORT).show();
                 }
             },2000);
@@ -49,6 +50,12 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 //            Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            Log.d("progress", values[0]+"");
         }
     }
 
