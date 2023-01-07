@@ -12,19 +12,28 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    Button button;
+    Button button,cancel;
+    MyAsyncTask myAsyncTask;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         button=findViewById(R.id.button);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                while(true);
-               new MyAsyncTask().execute("Azka");
+                myAsyncTask=new MyAsyncTask();
 
+                myAsyncTask.execute("Azka");
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myAsyncTask.cancel(true);
             }
         });
     }
@@ -40,7 +49,14 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
                     handler.postDelayed(this,2000);
                     onProgressUpdate(12);
-                    Toast.makeText(MainActivity.this, "This is running in runnable", Toast.LENGTH_SHORT).show();
+
+                    if(!isCancelled())
+                    {
+                        Toast.makeText(MainActivity.this, "This is running in runnable", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        handler.removeCallbacks(this);
+                    }
                 }
             },2000);
             return asd;
